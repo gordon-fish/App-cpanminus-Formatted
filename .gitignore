@@ -33,3 +33,15 @@ inc/
 /MANIFEST.bak
 /pm_to_blib
 /*.zip
+
+# Other
+*.bak
+*.sw*
+.DS_Store
+/.carton
+/.tidyall.d/
+/carton.lock
+/local/
+/perltidy.LOG
+/tidyall.ERR
+/var
