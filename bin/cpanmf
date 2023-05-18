@@ -1,0 +1,33 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use feature qw(state);
+
+use if $] < 5.026, 'Function::Parameters', { sub => 'function' };
+use if $] >= 5.026, experimental => qw(signatures);
+
+use lib qw(lib ../lib);
+
+use App::cpanminus::Formatted;
+
+my %hooks;
+
+$hooks{before_output} = sub ($app, $msgref, %status) {
+    local $_ = $$msgref;
+
+    if ( $status{is_bol} ) { # Is this the beginning of a new line?
+        $app->indent(\$_);
+
+        # Add a blank line between each work block + the final block.
+        $_ = "\n$_" if $status{is_bob} || $status{at_end};
+    }
+
+    $$msgref = $_;
+};
+
+unless (caller) {
+    exit App::cpanminus::Formatted->new(hooks => \%hooks)->doit;
+}
+
